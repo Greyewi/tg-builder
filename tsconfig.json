@@ -3,6 +3,8 @@
     "target": "es6",
     "module": "ESNext",
     "moduleResolution": "node",
+    "declaration": true,
+    "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
     "esModuleInterop": true,
