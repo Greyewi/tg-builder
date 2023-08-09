@@ -1,6 +1,6 @@
 {
   "name": "tg-builder",
-  "version": "0.1.6",
+  "version": "0.1.9",
   "description": "Builder library for the organisation of a lot of telegram bots.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
