@@ -1,7 +1,7 @@
 import { Telegraf, Context } from 'telegraf'
 import dotenv from 'dotenv'
-import { LowSync } from 'lowdb'
-import { JSONFileSync } from 'lowdb/node'
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config()
 
@@ -22,13 +22,37 @@ export interface Action {
   botName: string
 }
 
-export interface Bot {
-  token: string
-  name: string
+interface Bot {
+  token: string;
+  name: string;
 }
 
-export interface Schema {
-  bots: Bot[]
+interface BotDataSchema {
+  bots: Bot[];
+}
+
+class BotDataManager {
+  botData: BotDataSchema;
+
+  constructor() {
+    this.botData = { bots: [] };
+  }
+
+  loadBotData(filePath: string = 'tg.json', defModel: BotDataSchema = { bots: [] }): void {
+    const fullPath = path.resolve(filePath);
+    if (fs.existsSync(fullPath)) {
+      const fileContent = fs.readFileSync(fullPath, 'utf-8');
+      this.botData = JSON.parse(fileContent) as BotDataSchema;
+    } else {
+      this.botData = defModel;
+      this.saveBotData(fullPath);
+    }
+  }
+
+  saveBotData(filePath: string): void {
+    fs.writeFileSync(filePath, JSON.stringify(this.botData, null, 2), 'utf-8');
+  }
+
 }
 
 export class TgBuilder {
@@ -211,13 +235,12 @@ export class ActionBuilder {
 }
 
 export class BotsLoader {
-  botData: Schema
+  botData: BotDataSchema
   builders: any[] = []
-  constructor(path?: string, defModel?: Schema) {
-    const adapter = new JSONFileSync<Schema>(path || 'tg.json')
-    const db = new LowSync(adapter, defModel || { bots: [] })
-    db.read()
-    this.botData = db.data
+  constructor(path?: string, defModel?: BotDataSchema) {
+    const manager = new BotDataManager();
+    manager.loadBotData(path, defModel);
+    this.botData = manager.botData
   }
 
   addBot(
