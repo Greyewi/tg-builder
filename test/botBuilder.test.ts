@@ -1,14 +1,14 @@
-import { Telegraf } from 'telegraf'
-import { TgBuilder, CommandBuilder, ActionBuilder, BotsLoader } from '../src'
+import { TgBuilder, CommandBuilder, ActionBuilder, BotsLoader, BotDataManager } from '../src'
+import * as fs from 'fs'
+import * as path from 'path'
+import * as dotenv from "dotenv"
 
-// Mock the LowSync and JSONFileSync for the BotsLoader class.
-jest.mock('lowdb/node', () => ({
-  JSONFileSync: jest.fn().mockImplementation(() => ({
-    read: jest.fn().mockImplementation(function (this: any) {
-      this.data = { bots: [{ token: 'mock-token', name: 'mock-bot' }] }
-    }),
-  })),
-}))
+jest.mock('dotenv', () => ({
+  config: jest.fn(),
+}));
+
+jest.mock('fs')
+jest.mock('path')
 
 describe('TgBuilder class', () => {
   let tgBuilder: TgBuilder
@@ -64,7 +64,7 @@ describe('BotsLoader class', () => {
         },
       ],
     })
-  })
+  });
 
   it('should create BotsLoader instance', () => {
     expect(botsLoader).toBeInstanceOf(BotsLoader)
@@ -86,3 +86,48 @@ describe('BotsLoader class', () => {
 
   // TODO: add more tests based on the behavior of the class...
 })
+
+
+describe('BotDataManager class', () => {
+  let manager: BotDataManager;
+
+  beforeEach(() => {
+    manager = new BotDataManager();
+
+    // Reset mocks
+    (path.resolve as jest.MockedFunction<typeof path.resolve>).mockClear();
+    (fs.existsSync as jest.MockedFunction<typeof fs.existsSync>).mockClear();
+    (fs.readFileSync as jest.MockedFunction<typeof fs.readFileSync>).mockClear();
+    (fs.writeFileSync as jest.MockedFunction<typeof fs.writeFileSync>).mockClear();
+  });
+
+  it('loads bot data from existing file', () => {
+    (path.resolve as jest.MockedFunction<typeof path.resolve>).mockReturnValue('mocked/path/tg.json');
+    (fs.existsSync as jest.MockedFunction<typeof fs.existsSync>).mockReturnValue(true);
+    (fs.readFileSync as jest.MockedFunction<typeof fs.readFileSync>).mockReturnValue('{"bots": [{"token": "mock-token", "name": "mock-bot"}]}');
+
+    manager.loadBotData();
+
+    expect(manager.botData).toEqual({ bots: [{ token: 'mock-token', name: 'mock-bot' }] });
+  });
+
+  it('uses default bot data and saves it when file does not exist', () => {
+    (path.resolve as jest.MockedFunction<typeof path.resolve>).mockReturnValue('mocked/path/tg.json');
+    (fs.existsSync as jest.MockedFunction<typeof fs.existsSync>).mockReturnValue(false);
+
+    manager.loadBotData();
+
+    expect(manager.botData).toEqual({ bots: [] });
+    expect(fs.writeFileSync).toHaveBeenCalled();  // Check if the save function was called
+  });
+
+  it('saves bot data to file', () => {
+    manager.botData = { bots: [{ token: 'test-token', name: 'test-bot' }] };
+
+    (path.resolve as jest.MockedFunction<typeof path.resolve>).mockReturnValue('mocked/path/tg.json');
+
+    manager.saveBotData('mocked/path/tg.json');
+
+    expect(fs.writeFileSync).toHaveBeenCalledWith('mocked/path/tg.json', JSON.stringify(manager.botData, null, 2), 'utf-8');
+  });
+});

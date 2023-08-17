@@ -31,7 +31,7 @@ interface BotDataSchema {
   bots: Bot[];
 }
 
-class BotDataManager {
+export class BotDataManager {
   botData: BotDataSchema;
 
   constructor() {
