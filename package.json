@@ -16,7 +16,6 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "tsc example/tg-rpg/index.ts",
     "format": "prettier --write .",
     "example": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "build:npm": "rm -rf ./dist && tsc --build tsconfig.json && npm publish",
