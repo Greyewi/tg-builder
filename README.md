@@ -1,6 +1,11 @@
-# TG Builder
+# 🤖TG Builder
 
-`tg-builder` offers a streamlined approach to building and launching Telegram bots. Through a structured setup of commands and actions, it simplifies bot development and deployment.
+#### tg-builder provides an intuitive builder pattern that allows developers to:
+- Combine Multiple Bots: Run and manage several bots from a single codebase, each with their individual or shared functionalities.
+- Shared Logic: Easily reuse logic across different bots, making your code more DRY (Don't Repeat Yourself).
+- Modularity: Break down complex bot functionalities into manageable pieces, ensuring clean and readable code.
+- Scalability: As your bot ecosystem grows, tg-builder scales with you, making it effortless to add or modify existing bots.
+#### By adopting the builder pattern, tg-builder ensures your bots are more maintainable, organized, and efficient.
 
 ## 📦 Installation
 Using npm:
@@ -11,7 +16,30 @@ Using yarn:
 
 `yarn add tg-builder`
 
-## 🔍 Getting Started
+## ⚙️ Configuration
+
+Before you start, you need to create a configuration file named tg.json in your project's root. This file should contain the token and name of the bot you want to set up.
+
+<pre>
+{
+  "bots": [
+    {
+      "token": "xxxxxxxxxxxxxxxxxxxx",
+      "name": "GreyewiRogueBot"
+    },
+    {
+      "token": "xxxxxxxxxxxxxxxxxxxx",
+      "name": "GreyewiRogueBot"
+    }
+  ]
+}
+</pre>
+
+Replace xxxxxxxxxxxxxxxxxxxx with your actual bot tokens.
+
+#### 🛑 Remember, always keep your bot tokens secret and never expose them in publicly accessible places or repositories.
+
+## 📖 Getting Started
 
 ### 1. Importing Modules
    Begin by importing the essential modules:
@@ -55,7 +83,7 @@ loader.launch((err) => {
 });
 </pre>
 
-# 📖 Example
+# 🚀 Example
 
 Here's a glimpse of a bot providing a text-based RPG game experience:
 
@@ -118,4 +146,14 @@ loader.launch((err) => {
 
 </pre>
 
-#### With tg-builder, bot development becomes a structured, readable, and maintainable endeavor. Dive in to explore more functionalities and elevate your bot development journey!
+## 📄 Definitions
+
+### 1. Command
+
+<table><thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>command</td><td><code>string</code></td><td>The command name to be recognized by the bot.</td></tr><tr><td>callback</td><td><code>(ctx: Context) =&gt; void</code></td><td>The callback function executed when the command is called.</td></tr><tr><td>botName</td><td><code>string</code></td><td>Name of the bot the command belongs to.</td></tr></tbody></table>
+
+### 2. Action
+
+<table><thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>action</td><td><code>string</code></td><td>The action identifier.</td></tr><tr><td>callback</td><td><code>(ctx: Context) =&gt; void</code></td><td>The callback function executed when the action is triggered.</td></tr><tr><td>botName</td><td><code>string</code></td><td>Name of the bot the action belongs to.</td></tr></tbody></table>
+
+With tg-builder, bot development becomes a structured, readable, and maintainable endeavor. Dive in to explore more functionalities and elevate your bot development journey!
