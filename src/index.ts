@@ -1,14 +1,6 @@
 import { Telegraf, Context } from 'telegraf'
-import dotenv from 'dotenv'
 import fs from 'fs';
 import path from 'path';
-
-dotenv.config()
-
-process.on('uncaughtException', function (e) {
-  console.log(new Date().toString(), e.stack || e)
-  process.exit(1)
-})
 
 export interface Command {
   command: string

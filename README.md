@@ -93,7 +93,6 @@ import { BotsLoader, CommandBuilder, ActionBuilder } from 'tg-builder'
 const name = "GreyewiRogueBot"
 const gameCommands = (botName: string) =>
   new CommandBuilder(botName).setNewCommand('start', async (ctx) => {
-    try {
       await ctx.reply(`You are welcome in super <b>text tg rpg game!</b>:`, {
         parse_mode: 'HTML',
         reply_markup: {
@@ -115,10 +114,6 @@ const gameCommands = (botName: string) =>
           ],
         },
       })
-    } catch (e: any) {
-      console.error(e)
-      return ctx.reply(e.message)
-    }
   })
 
 const gameActions = (botName: string) =>

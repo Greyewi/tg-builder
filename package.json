@@ -1,6 +1,6 @@
 {
   "name": "tg-builder",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "Builder library for the organisation of a lot of telegram bots.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,7 +33,7 @@
   "author": "Suntsev Sergey",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.3.1"
+    "telegraf": "^4.12.3-canary.1"
   },
   "devDependencies": {
     "@telegraf/types": "^6.7.0",

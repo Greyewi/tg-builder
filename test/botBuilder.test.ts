@@ -1,11 +1,6 @@
 import { TgBuilder, CommandBuilder, ActionBuilder, BotsLoader, BotDataManager } from '../src'
 import * as fs from 'fs'
 import * as path from 'path'
-import * as dotenv from "dotenv"
-
-jest.mock('dotenv', () => ({
-  config: jest.fn(),
-}));
 
 jest.mock('fs')
 jest.mock('path')
